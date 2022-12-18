@@ -47,7 +47,7 @@ def multiclass_nms(multi_bboxes,
     bboxes = bboxes.reshape(-1, 4)
     scores = scores.reshape(-1)
     labels = labels.reshape(-1)
-
+    bboxes, scores, labels = bboxes.to('cuda:0'), scores.to('cuda:0'), labels.to('cuda:0') 
     if not torch.onnx.is_in_onnx_export():
         # NonZero not supported  in TensorRT
         # remove low scoring boxes
@@ -60,6 +60,8 @@ def multiclass_nms(multi_bboxes,
             multi_scores.size(0), num_classes)
         score_factors = score_factors.reshape(-1)
         scores = scores * score_factors
+
+    
 
     if not torch.onnx.is_in_onnx_export():
         # NonZero not supported  in TensorRT
